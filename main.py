@@ -31,9 +31,16 @@ def main():
     running = True
     
     while running:
+        if attack_board.mouse_hover(pygame.mouse.get_pos()) is None:
+            pygame.mouse.set_cursor(*pygame.cursors.arrow)
+        else:
+            pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                attack_board.make_move(pygame.mouse.get_pos())
                 
 if __name__ == "__main__":
     main()

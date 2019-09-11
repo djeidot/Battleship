@@ -15,6 +15,7 @@ class AttackBoard():
              '--X-------',
              '--X-------',
              '------W---']
+    #board = [['-' for j in range(board_size_h)] for i in range(board_size_v)]
 
     top = 20
     width = 300
@@ -42,3 +43,23 @@ class AttackBoard():
         for i in range(0, board_size_h):
             for j in range(0, board_size_v):
                 pygame.draw.rect(screen, get_color(self.board[i][j]), self.rects[i][j])
+
+    def mouse_hover(self, mouse_pos):
+        if not self.inner_rect.collidepoint(mouse_pos):
+            return None
+
+        for i in range(board_size_h):
+            for j in range(board_size_v):
+                if self.rects[i][j].collidepoint(mouse_pos):
+                    return (i,j)
+
+        return None
+
+    def make_move(self, mouse_pos):
+        coords = mouse_hover(mouse_pos)
+        if coords is None:
+            return
+        
+        # TODO - send move to server, get updated knowledge
+        
+        
