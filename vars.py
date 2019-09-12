@@ -15,8 +15,8 @@ board_size_v = 10
 
 def get_color(chr):
     return {
-        "-": neutral_color,
-        "W": water_color,
+        "?": neutral_color,
+        ".": water_color,
         "O": boat_color,
         "X": hit_color
     }.get(chr)

@@ -1,21 +1,24 @@
 import pygame
+
+from api import Api
+from helpers import get_grid_ref
 from vars import *
 from pygame.rect import Rect
 
 
 class AttackBoard():
 
-    board = ['----------',
-             'W----XX---',
-             '----------',
-             '------W---',
-             '--W--X----',
-             '-------W--',
-             '--W-------',
-             '--X-------',
-             '--X-------',
-             '------W---']
-    #board = [['-' for j in range(board_size_h)] for i in range(board_size_v)]
+    board = ['??????????',
+             '.????XX???',
+             '??????????',
+             '??????.???',
+             '??.??X????',
+             '???????.??',
+             '??.???????',
+             '??X???????',
+             '??X???????',
+             '??????.???']
+    #board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
 
     top = 20
     width = 300
@@ -55,11 +58,12 @@ class AttackBoard():
 
         return None
 
-    def make_move(self, mouse_pos):
-        coords = mouse_hover(mouse_pos)
+    def make_move(self, mouse_pos, api_id):
+        coords = self.mouse_hover(mouse_pos)
         if coords is None:
             return
         
-        # TODO - send move to server, get updated knowledge
-        
+        r = Api.makeMove(api_id, "joao1", get_grid_ref(*coords))
+        self.board = r["knowledge"]
+
         

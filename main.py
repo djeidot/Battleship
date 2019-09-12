@@ -1,14 +1,18 @@
 import pygame
 
+from api import Api
 from attackboard import AttackBoard
 from defenseboard import DefenseBoard
 from vars import *
 
 
 def main():
+    # Initiate api
+    r = Api.startGame("joao1", "joao2")
+    api_id = r["id"]
+    
     pygame.init()
     pygame.display.set_caption("Battleship")
-
 
     screen = pygame.display.set_mode((screen_width, screen_height))
     screen.fill(background_color)
@@ -40,7 +44,9 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONUP:
-                attack_board.make_move(pygame.mouse.get_pos())
+                attack_board.make_move(pygame.mouse.get_pos(), api_id)
+                attack_board.draw(screen)
+                pygame.display.flip()
                 
 if __name__ == "__main__":
     main()
