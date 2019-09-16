@@ -3,6 +3,7 @@ import pygame
 from api import Api
 from attackboard import AttackBoard
 from defenseboard import DefenseBoard
+from menu import Menu
 from vars import *
 
 
@@ -17,28 +18,36 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
     screen.fill(background_color)
 
-    attack_board = AttackBoard()
-    attack_board.draw(screen)
-    
-    pygame.draw.polygon(screen, border_color, [
-        (screen_middle_h - 150, 330),
-        (screen_middle_h + 150, 330),
-        (screen_middle_h + 200, 330+150),
-        (screen_middle_h - 200, 330+150)
-    ])
+    menu = Menu()
 
-    defense_board = DefenseBoard()
-    defense_board.draw(screen)
+    if menu.menuOn():
+        menu.draw(screen)
+    else:
+        attack_board = AttackBoard()
+        attack_board.draw(screen)
+        
+        pygame.draw.polygon(screen, border_color, [
+            (screen_middle_h - 150, 330),
+            (screen_middle_h + 150, 330),
+            (screen_middle_h + 200, 330+150),
+            (screen_middle_h - 200, 330+150)
+        ])
+    
+        defense_board = DefenseBoard()
+        defense_board.draw(screen)
     
     pygame.display.flip()
     
     running = True
     
     while running:
-        if attack_board.mouse_hover(pygame.mouse.get_pos()) is None:
-            pygame.mouse.set_cursor(*pygame.cursors.arrow)
+        if menu.menuOn():
+            pass
         else:
-            pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+            if attack_board.mouse_hover(pygame.mouse.get_pos()) is None:
+                pygame.mouse.set_cursor(*pygame.cursors.arrow)
+            else:
+                pygame.mouse.set_cursor(*pygame.cursors.broken_x)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
