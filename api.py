@@ -14,12 +14,17 @@ class Api:
         body = {"player1": player1, "player2": player2}
         r = requests.post(_url("games/"), json=body)
         return r.json()
-    
+
     @staticmethod
     def getGames():
         r = requests.get(_url("games/"))
         return r.json()
-    
+
+    @staticmethod
+    def getGame(game_id):
+        r = requests.get(_url("games/" + game_id + "/"))
+        return r.json()
+
     @staticmethod
     def getPlayerInfo(player):
         r = requests.get(_url("players/" + player))
@@ -32,3 +37,8 @@ class Api:
         body = {"player": player}
         r = requests.put(_url("games/" + api_id + "/" + grid_ref + "/"), json=body)
         return r.json()
+    
+    @staticmethod
+    def deleteGame(game_id):
+        r = requests.delete(_url("games/" + game_id + "/"))
+        return r.status_code == 204

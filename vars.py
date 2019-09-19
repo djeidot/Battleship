@@ -5,10 +5,11 @@ screen_middle_v = screen_height / 2
 
 background_color = (240,240,240)
 neutral_color = (180,180,180)
-border_color = (50,50,50)
+grid_color = (50, 50, 50)
 water_color = (50,50,255)
 boat_color = (100,100,100)
 hit_color = (255,50,50)
+border_color = (0, 210, 0)
 
 board_size_h = 10
 board_size_v = 10

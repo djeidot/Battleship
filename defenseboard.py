@@ -3,18 +3,20 @@ from vars import *
 from pygame.rect import Rect
 
 class DefenseBoard():
-    
-    board = ['??????????',
-             '??O???.???',
-             '??O???????',
-             '??X??.????',
-             '??O???OO??',
-             '??O???????',
-             '??????????',
-             '?.??O?????',
-             '????O?????',
-             '????O?????']
-    
+
+    # board = ['??????????',
+    #          '??O???.???',
+    #          '??O???????',
+    #          '??X??.????',
+    #          '??O???OO??',
+    #          '??O???????',
+    #          '??????????',
+    #          '?.??O?????',
+    #          '????O?????',
+    #          '????O?????']
+    board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
+    my_turn = False
+
     top = 330.0
     width_top = 300.0
     width_bottom = 400.0
@@ -42,6 +44,13 @@ class DefenseBoard():
     margin_h_bottom = margin_h * width_bottom / width_top
     item_width_bottom = (width_bottom - margin_h_bottom * (board_size_h + 1)) / board_size_h
 
+    border_poly = [
+        (screen_middle_h - width_top / 2 - margin_h * 1.8, top - margin_v * 2),
+        (screen_middle_h + width_top / 2 + margin_h * 1.8, top - margin_v * 2),
+        (screen_middle_h + width_bottom / 2 + margin_h_bottom * 2.2, bottom + margin_v * 2),
+        (screen_middle_h - width_bottom / 2 - margin_h_bottom * 2.2, bottom + margin_v * 2)
+    ]
+
     margin_h_percent = margin_h / width_top
     item_width_percent = (1 - (board_size_h + 1) * margin_h_percent) / board_size_h
 
@@ -64,9 +73,15 @@ class DefenseBoard():
             polys[i].append(poly)
 
     def draw(self, screen) -> None:
-        pygame.draw.polygon(screen, border_color, self.outer_poly)
+        if self.my_turn:
+            pygame.draw.polygon(screen, border_color, self.border_poly)
+
+        pygame.draw.polygon(screen, grid_color, self.outer_poly)
 
         for i in range(board_size_v):
             for j in range(board_size_h):
                 pygame.draw.polygon(screen, get_color(self.board[i][j]), self.polys[i][j])
 
+    def update_board(self, board, is_attacking):
+        self.board = board
+        self.my_turn = not is_attacking
