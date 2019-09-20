@@ -16,6 +16,7 @@ class DefenseBoard():
     #          '????O?????']
     board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
     my_turn = False
+    counter = 100
 
     top = 330.0
     width_top = 300.0
@@ -85,3 +86,16 @@ class DefenseBoard():
     def update_board(self, board, is_attacking):
         self.board = board
         self.my_turn = not is_attacking
+
+    def frame_update(self):
+        pygame.mouse.set_cursor(*pygame.cursors.arrow)
+
+        self.counter = self.counter - 1
+        if self.counter == 0:
+            self.counter = 100
+            return True
+
+        return False
+
+    def handle_event(self, event):
+        return False

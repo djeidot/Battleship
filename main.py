@@ -3,6 +3,7 @@ import pygame
 from api import Api
 from attackboard import AttackBoard
 from defenseboard import DefenseBoard
+from game import Game
 from menu import Menu
 from vars import *
 
@@ -13,13 +14,7 @@ def clear_previous_games(player_name):
         Api.deleteGame(gameId)
 
 
-def update_boards(screen, attack_board, defense_board, game, player1):
-    is_attacking = game['move'] == player1
-    screen.fill(background_color)
-    attack_board.update_board(game['player1']['knowledge'], is_attacking)
-    attack_board.draw(screen)
-    defense_board.update_board(game['player2']['knowledge'], is_attacking)
-    defense_board.draw(screen)
+
 
 
 
@@ -40,54 +35,34 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
 
     menu = Menu()
+    game = Game(game_id, screen, player1)
 
     if menu.menuOn():
         menu.draw(screen)
     else:
-        game = Api.getGame(game_id)
-        is_attacking = game['move'] == player1
-        attack_board = AttackBoard()
-        defense_board = DefenseBoard()
-        update_boards(screen, attack_board, defense_board, game, player1)
-        pygame.display.flip()
+        game.draw()
 
     running = True
     counter = 100
 
     while running:
+        needs_redraw = False
         if menu.menuOn():
             pass
         else:
-            if is_attacking:
-                if attack_board.mouse_hover(pygame.mouse.get_pos()) is None:
-                    pygame.mouse.set_cursor(*pygame.cursors.arrow)
-                else:
-                    pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+            needs_redraw = game.frame_update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
             else:
-                pygame.mouse.set_cursor(*pygame.cursors.arrow)
-
-            if not is_attacking:
-                counter = counter - 1
-                if counter == 0:
-                    counter = 100
-                    game = Api.getGame(game_id)
-                    is_attacking = game['move'] == player1
-                    update_boards(screen, attack_board, defense_board, game, player1)
-                    pygame.display.flip()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    if is_attacking:
-                        attack_board.make_move(pygame.mouse.get_pos(), game_id)
-                        game = Api.getGame(game_id)
-                        is_attacking = game['move'] == player1
-                        update_boards(screen, attack_board, defense_board, game, player1)
-                        pygame.display.flip()
+                if menu.menuOn():
+                    pass
+                else:
+                    needs_redraw = game.handle_events(event)
                     
-                
-            
+        if needs_redraw:
+            game.draw()
                     
 if __name__ == "__main__":
     main()

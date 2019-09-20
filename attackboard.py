@@ -8,16 +8,7 @@ from pygame.rect import Rect
 
 class AttackBoard():
 
-    # board = ['??????????',
-    #          '.????XX???',
-    #          '??????????',
-    #          '??????.???',
-    #          '??.??X????',
-    #          '???????.??',
-    #          '??.???????',
-    #          '??X???????',
-    #          '??X???????',
-    #          '??????.???']
+    pointer_cursor = pygame.cursors.compile(pointer_cursor_string, 'X', '.')
     board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
     my_turn = True
 
@@ -43,6 +34,10 @@ class AttackBoard():
             item_rect = Rect(left, top, right - left, bottom - top)
             rects[i].append(item_rect)
 
+    def __init__(self, game_id) -> None:
+        super().__init__()
+        self.game_id = game_id
+
     def draw(self, screen) -> None:
         if self.my_turn:
             pygame.draw.rect(screen, border_color, self.border_rect)
@@ -62,15 +57,27 @@ class AttackBoard():
 
         return None
 
-    def make_move(self, mouse_pos, api_id):
+    def make_move(self, mouse_pos):
         coords = self.mouse_hover(mouse_pos)
         if coords is None:
             return
-        
-        r = Api.makeMove(api_id, "joao1", get_grid_ref(*coords))
+        Api.makeMove(self.game_id, "joao1", get_grid_ref(*coords))
     
     def update_board(self, board, is_attacking):
         self.board = board
         self.my_turn = is_attacking
 
+    def frame_update(self):
+        if self.mouse_hover(pygame.mouse.get_pos()) is None:
+            pygame.mouse.set_cursor(*pygame.cursors.arrow)
+        else:
+            pygame.mouse.set_cursor((24, 24), (6, 0), *self.pointer_cursor)
         
+        return False
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONUP:
+            self.make_move(pygame.mouse.get_pos())
+            return True
+        
+        return False

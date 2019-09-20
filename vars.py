@@ -21,3 +21,30 @@ def get_color(chr):
         "O": boat_color,
         "X": hit_color
     }.get(chr)
+
+pointer_cursor_string = (   #sized 24x24, hotspot(6, 0)
+    "     XX                 ",
+    "    X..X                ",
+    "    X..X                ",
+    "    X..X                ",
+    "    X..X                ",
+    "    X..XXX              ",
+    "    X..X..XXX           ",
+    "    X..X..X..XXX        ",
+    "    X..X..X..X..X       ",
+    "XXX X..X..X..X...X      ",
+    "X..XX........X...X      ",
+    "X...X............X      ",
+    " X...............X      ",
+    "  X..............X      ",
+    "  X..............X      ",
+    "   X............ X      ",
+    "   X............X       ",
+    "    X...........X       ",
+    "    X...........X       ",
+    "     X.........X        ",
+    "     X.........X        ",
+    "     XXXXXXXXXXX        ",
+    "                        ",
+    "                        ",
+)
