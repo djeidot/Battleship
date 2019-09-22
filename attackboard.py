@@ -34,9 +34,10 @@ class AttackBoard():
             item_rect = Rect(left, top, right - left, bottom - top)
             rects[i].append(item_rect)
 
-    def __init__(self, game_id) -> None:
+    def __init__(self, game_id, player) -> None:
         super().__init__()
         self.game_id = game_id
+        self.player = player
 
     def draw(self, screen) -> None:
         if self.my_turn:
@@ -61,7 +62,7 @@ class AttackBoard():
         coords = self.mouse_hover(mouse_pos)
         if coords is None:
             return
-        Api.makeMove(self.game_id, "joao1", get_grid_ref(*coords))
+        Api.makeMove(self.game_id, self.player, get_grid_ref(*coords))
     
     def update_board(self, board, is_attacking):
         self.board = board

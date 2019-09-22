@@ -8,19 +8,24 @@ from vars import background_color
 
 class Game:
 
-    def __init__(self, game_id, screen, player1) -> None:
+    def __init__(self, game_id, screen, player1, player2, local_player) -> None:
         super().__init__()
         self.game_id = game_id
         self.screen = screen
-        self.player1 = player1
-        self.attack_board = AttackBoard()
+        self.local_player = player1 if local_player else player2
+        self.remote_player = player2 if local_player else player1
+        self.local_player_tag = 'player1' if local_player else 'player2'
+        self.remote_player_tag = 'player2' if local_player else 'player1'
+        self.local_player = local_player
+        self.attack_board = AttackBoard(self.game_id, self.local_player)
         self.defense_board = DefenseBoard()
+        self.update_game()
 
     def update_game(self):
         self.game = Api.getGame(self.game_id)
-        self.is_attacking = self.game['move'] == self.player1
-        self.attack_board.update_board(self.game['player1']['knowledge'], self.is_attacking)
-        self.defense_board.update_board(self.game['player2']['knowledge'], self.is_attacking)
+        self.is_attacking = self.game['move'] == self.local_player
+        self.attack_board.update_board(self.game[self.local_player_tag]['knowledge'], self.is_attacking)
+        self.defense_board.update_board(self.game[self.remote_player_tag]['knowledge'], self.is_attacking)
 
     def draw(self):
         self.screen.fill(background_color)
