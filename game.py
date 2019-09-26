@@ -12,11 +12,10 @@ class Game:
         super().__init__()
         self.game_id = game_id
         self.screen = screen
-        self.local_player = player1 if local_player else player2
-        self.remote_player = player2 if local_player else player1
-        self.local_player_tag = 'player1' if local_player else 'player2'
-        self.remote_player_tag = 'player2' if local_player else 'player1'
-        self.local_player = local_player
+        self.local_player = player1 if local_player == 1 else player2
+        self.remote_player = player2 if local_player == 1 else player1
+        self.local_player_tag = 'player1' if local_player == 1 else 'player2'
+        self.remote_player_tag = 'player2' if local_player == 1 else 'player1'
         self.attack_board = AttackBoard(self.game_id, self.local_player)
         self.defense_board = DefenseBoard()
         self.update_game()
@@ -55,4 +54,5 @@ class Game:
 
         return needs_update
 
-        
+    def get_game_id(self):
+        return self.game_id

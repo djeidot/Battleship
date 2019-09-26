@@ -24,9 +24,9 @@ class AttackBoard():
     item_width = float(inner_rect.width - (margin * (board_size_h - 1))) / board_size_h
     item_height = float(inner_rect.height - (margin * (board_size_v - 1))) / board_size_v
 
-    rects = [[] for i in range(board_size_h)]
-    for i in range(board_size_h):
-        for j in range(board_size_v):
+    rects = [[] for i in range(board_size_v)]
+    for i in range(board_size_v):
+        for j in range(board_size_h):
             left = inner_rect.left + int(i * (item_width + margin))
             top = inner_rect.top + int(j * (item_height + margin))
             right = inner_rect.left + int(i * (item_width + margin) + item_width)
@@ -43,16 +43,16 @@ class AttackBoard():
         if self.my_turn:
             pygame.draw.rect(screen, border_color, self.border_rect)
         pygame.draw.rect(screen, grid_color, self.outer_rect)
-        for i in range(0, board_size_h):
-            for j in range(0, board_size_v):
+        for i in range(0, board_size_v):
+            for j in range(0, board_size_h):
                 pygame.draw.rect(screen, get_color(self.board[i][j]), self.rects[i][j])
 
     def mouse_hover(self, mouse_pos):
         if not self.inner_rect.collidepoint(mouse_pos):
             return None
 
-        for i in range(board_size_h):
-            for j in range(board_size_v):
+        for i in range(board_size_v):
+            for j in range(board_size_h):
                 if self.rects[i][j].collidepoint(mouse_pos):
                     return (i,j)
 

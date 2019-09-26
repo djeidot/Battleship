@@ -1,11 +1,10 @@
 import pygame
 
 from api import Api
-from attackboard import AttackBoard
-from defenseboard import DefenseBoard
 from game import Game
 from menu import Menu
 from vars import *
+
 
 def clear_previous_games(player_name):
     # Clears all previous games with this player
@@ -23,7 +22,7 @@ def main():
     game_id = None
     
     # Initiate api
-    #clear_previous_games(player1)
+    #clear_previous_games("joao1")
 
     pygame.init()
     pygame.display.set_caption("Battleship")
@@ -41,13 +40,14 @@ def main():
             game_id = menu.get_game_id()
             if game_id is not None:
                 game = init_game(game_id, screen, *menu.get_player_info())
+                needs_redraw = True
         else:
             game_id = game.get_game_id()
             if game_id is None:
                 menu.__init__(screen)
         
         if game_id is not None:
-            needs_redraw = game.frame_update()
+            needs_redraw = needs_redraw or game.frame_update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,7 +56,7 @@ def main():
                 if game_id is None:
                     menu.react(event)
                 else:
-                    needs_redraw = game.handle_events(event)
+                    needs_redraw = needs_redraw or game.handle_events(event)
                     
         if needs_redraw:
             game.draw()

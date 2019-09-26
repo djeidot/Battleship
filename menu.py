@@ -67,19 +67,18 @@ class Menu:
         self.player1 = self.player1Edit.get_value()
         self.player2 = self.player2Edit.get_value()
         self.local_player = 1
-        #r = Api.startGame(player1, player2)
-        #self.game_id = r["id"]
-        self.game_id = 1
+        r = Api.startGame(self.player1, self.player2)
         self.end_menu()
+        self.game_id = r["id"]
         
     def start_game_join(self, event):
-        self.game_id = event.value.split(":")[0]
-        #r = Api.getGame(game_id)
-        #self.player1 = r["players"]["player1"]
-        #self.player2 = r["players"]["player2"]
-        #self.local_player = 1 if self.playerJoiningEdit.get_value() == self.player1 else 2
+        game_id_local = event.value
+        r = Api.getGame(game_id_local)
+        self.player1 = r["player1"]["name"]
+        self.player2 = r["player2"]["name"]
+        self.local_player = 1 if self.playerJoiningEdit.get_value() == self.player1 else 2
         self.end_menu()
-        pass
+        self.game_id = game_id_local
     
     def join_game(self):
         self.playerJoiningEdit = thorpy.Inserter.make("Player name: ")
@@ -91,10 +90,8 @@ class Menu:
 
     def get_games_list(self, event):
         player_name = event.el.get_value()
-        #r = Api.getPlayerInfo(player_name)
-        games_list = ["1: joao1 v. joao2",
-                      "23: joao3 v. joao2",
-                      "344: joao4 v. joao2"]
+        r = Api.getPlayerInfo(player_name)
+        games_list = [id for id in r["games"]] if r is not None else []
         label = thorpy.OneLineText.make("Here's a list of games " + player_name + " is in:")
         self.gamesListEdit = thorpy.DropDownList.make(games_list, size=(250,150), x=5)
         self.gamesListEdit.finish()
