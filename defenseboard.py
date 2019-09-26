@@ -14,7 +14,7 @@ class DefenseBoard():
     #          '?.??O?????',
     #          '????O?????',
     #          '????O?????']
-    board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
+    board = [['?' for c in range(board_size_h)] for r in range(board_size_v)]
     my_turn = False
     counter = 100
 
@@ -55,14 +55,14 @@ class DefenseBoard():
     margin_h_percent = margin_h / width_top
     item_width_percent = (1 - (board_size_h + 1) * margin_h_percent) / board_size_h
 
-    polys = [[] for i in range(board_size_v)]
-    for i in range(board_size_v):
-        row_top = inner_top + i * (item_height + margin_v)
+    polys = [[] for r in range(board_size_v)]
+    for r in range(board_size_v):
+        row_top = inner_top + r * (item_height + margin_v)
         row_bottom = row_top + item_height
-        for j in range(board_size_h):
-            left_top = screen_middle_h - width_top / 2 + margin_h + (item_width_top + margin_h) * j
+        for c in range(board_size_h):
+            left_top = screen_middle_h - width_top / 2 + margin_h + (item_width_top + margin_h) * c
             right_top = left_top + item_width_top
-            left_bottom = screen_middle_h - width_bottom / 2 + margin_h_bottom + (item_width_bottom + margin_h_bottom) * j
+            left_bottom = screen_middle_h - width_bottom / 2 + margin_h_bottom + (item_width_bottom + margin_h_bottom) * c
             right_bottom = left_bottom + item_width_bottom
 
             poly = [
@@ -71,7 +71,7 @@ class DefenseBoard():
                 (interp(row_bottom, top, bottom, right_top, right_bottom), row_bottom),
                 (interp(row_bottom, top, bottom, left_top, left_bottom), row_bottom)
             ]
-            polys[i].append(poly)
+            polys[r].append(poly)
 
     def draw(self, screen) -> None:
         if self.my_turn:
@@ -79,9 +79,9 @@ class DefenseBoard():
 
         pygame.draw.polygon(screen, grid_color, self.outer_poly)
 
-        for i in range(board_size_v):
-            for j in range(board_size_h):
-                pygame.draw.polygon(screen, get_color(self.board[i][j]), self.polys[i][j])
+        for r in range(board_size_v):
+            for c in range(board_size_h):
+                pygame.draw.polygon(screen, get_color(self.board[r][c]), self.polys[r][c])
 
     def update_board(self, board, is_attacking):
         self.board = board

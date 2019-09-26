@@ -9,7 +9,7 @@ from pygame.rect import Rect
 class AttackBoard():
 
     pointer_cursor = pygame.cursors.compile(pointer_cursor_string, 'X', '.')
-    board = [['?' for j in range(board_size_h)] for i in range(board_size_v)]
+    board = [['?' for c in range(board_size_h)] for r in range(board_size_v)]
     my_turn = True
 
     top = 20
@@ -24,15 +24,15 @@ class AttackBoard():
     item_width = float(inner_rect.width - (margin * (board_size_h - 1))) / board_size_h
     item_height = float(inner_rect.height - (margin * (board_size_v - 1))) / board_size_v
 
-    rects = [[] for i in range(board_size_v)]
-    for i in range(board_size_v):
-        for j in range(board_size_h):
-            left = inner_rect.left + int(i * (item_width + margin))
-            top = inner_rect.top + int(j * (item_height + margin))
-            right = inner_rect.left + int(i * (item_width + margin) + item_width)
-            bottom = inner_rect.top + int(j * (item_height + margin) + item_height)
+    rects = [[] for r in range(board_size_v)]
+    for r in range(board_size_v):
+        for c in range(board_size_h):
+            left = inner_rect.left + int(c * (item_width + margin))
+            top = inner_rect.top + int(r * (item_height + margin))
+            right = inner_rect.left + int(c * (item_width + margin) + item_width)
+            bottom = inner_rect.top + int(r * (item_height + margin) + item_height)
             item_rect = Rect(left, top, right - left, bottom - top)
-            rects[i].append(item_rect)
+            rects[r].append(item_rect)
 
     def __init__(self, game_id, player) -> None:
         super().__init__()
@@ -43,18 +43,18 @@ class AttackBoard():
         if self.my_turn:
             pygame.draw.rect(screen, border_color, self.border_rect)
         pygame.draw.rect(screen, grid_color, self.outer_rect)
-        for i in range(0, board_size_v):
-            for j in range(0, board_size_h):
-                pygame.draw.rect(screen, get_color(self.board[i][j]), self.rects[i][j])
+        for r in range(board_size_v):
+            for c in range(board_size_h):
+                pygame.draw.rect(screen, get_color(self.board[r][c]), self.rects[r][c])
 
     def mouse_hover(self, mouse_pos):
         if not self.inner_rect.collidepoint(mouse_pos):
             return None
 
-        for i in range(board_size_v):
-            for j in range(board_size_h):
-                if self.rects[i][j].collidepoint(mouse_pos):
-                    return (i,j)
+        for r in range(board_size_v):
+            for c in range(board_size_h):
+                if self.rects[r][c].collidepoint(mouse_pos):
+                    return (r,c)
 
         return None
 
